@@ -3,7 +3,7 @@ const express = require('express');
 const app = express();
 
 app.get('/', (req, res) => {
-  res.send('Hello world\n');
+  res.send('Heya from non-master branch\n');
 });
 
 app.get('/dump-env', (req, res) => {
