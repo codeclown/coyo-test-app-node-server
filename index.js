@@ -1,4 +1,5 @@
 const express = require('express');
+const fs = require('fs');
 
 const app = express();
 
@@ -6,8 +7,17 @@ app.get('/', (req, res) => {
   res.send('Hello world\n');
 });
 
-app.get('/dump-env', (req, res) => {
-  res.send(Object.keys(process.env).map(key => `${key}=${process.env[key]}`).join('\n'));
+app.get('/write-and-read-volume', (req, res) => {
+  let counter = 0;
+  try {
+    counter = parseInt(fs.readFileSync('/mounted-volume/counter.txt', 'utf-8'));
+  } catch (error) {
+    // File does not exist yet
+  }
+  counter += 1;
+  counter = counter.toString();
+  fs.writeFileSync('/mounted-volume/counter.txt', counter);
+  res.set('content-type', 'text/html').send(counter);
 });
 
 app.listen(8084, () => {
